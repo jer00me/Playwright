@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Unsere Seite</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    label { display: block; margin-top: 10px; }
+    input, select { margin-top: 5px; }
+    #confirmBtn {
+      background-color: red;
+      color: white;
+      padding: 10px;
+      border: none;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+    #output { margin-top: 20px; font-weight: bold; }
+    a { display: block; margin-top: 30px; color: blue; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Unsere Seite</h1>
+
+  <label for="name">Name:</label>
+  <input type="text" id="name" placeholder="Bitte Namen eingeben">
+
+  <label for="birthdate">Geburtsdatum:</label>
+  <input type="date" id="birthdate">
+
+  <label for="color">Lieblingsfarbe:</label>
+  <select id="color">
+    <option value="">Bitte Farbe wählen</option>
+    <option value="red">Rot</option>
+    <option value="green">Grün</option>
+    <option value="yellow">Gelb</option>
+    <option value="blue">Blau</option>
+  </select>
+
+  <button id="confirmBtn" onclick="handleConfirm()">Bestätigen</button>
+
+  <div id="output"></div>
+
+  <a href="unsere_seite2.html">Zur zweiten Seite</a>
+
+  <script>
+    const nameInput = document.getElementById('name');
+    const birthInput = document.getElementById('birthdate');
+    const colorSelect = document.getElementById('color');
+    const confirmBtn = document.getElementById('confirmBtn');
+
+    function checkFields() {
+      if (nameInput.value.trim() && birthInput.value && colorSelect.value) {
+        confirmBtn.style.backgroundColor = 'green';
+      } else {
+        confirmBtn.style.backgroundColor = 'red';
+      }
+    }
+
+    nameInput.addEventListener('input', checkFields);
+    birthInput.addEventListener('input', checkFields);
+    colorSelect.addEventListener('change', checkFields);
+
+    function handleConfirm() {
+      if (!(nameInput.value.trim() && birthInput.value && colorSelect.value)) {
+        alert("Bitte alle Felder ausfüllen!");
+        return;
+      }
+
+      const name = nameInput.value.trim();
+      const birthDate = new Date(birthInput.value);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      const color = colorSelect.value;
+      document.getElementById('output').innerHTML =
+        `Hallo <span style="color:${color}">${name}</span>! Du bist ${age} Jahre alt.`;
+    }
+  </script>
+</body>
+</html>

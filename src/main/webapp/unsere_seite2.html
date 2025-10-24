@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Unsere Seite 2</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #feedback { margin-top: 20px; font-weight: bold; }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    a { display: block; margin-top: 30px; color: blue; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Unsere Seite 2</h1>
+
+  <p>Gefällt dir die Seite?</p>
+  <input type="radio" name="like" value="yes" onclick="showFeedback()"> Ja
+  <input type="radio" name="like" value="no" onclick="showFeedback()"> Nein
+
+  <div id="feedback"></div>
+
+  <button onclick="goBack()">Zurück zur ersten Seite</button>
+
+  <script>
+    function showFeedback() {
+      const radios = document.getElementsByName('like');
+      for (let radio of radios) {
+        if (radio.checked) {
+          document.getElementById('feedback').innerText =
+            radio.value === 'yes' ? 'Freut uns zu hören!' : 'Schade.';
+        }
+      }
+    }
+
+    function goBack() {
+      window.location.href = 'unsere_seite.html';
+    }
+  </script>
+</body>
+</html>
