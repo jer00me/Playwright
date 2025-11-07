@@ -1,26 +1,23 @@
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UnsereSeite2Test {
+public class UnsereSeite2Test extends PlaywrightAbstractTester{
 
     static Playwright playwright;
     static Browser browser;
     BrowserContext context;
     Page page;
 
-    @BeforeAll
-    static void setupBrowser() {
-        playwright = Playwright.create();
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
-    }
+    private UnsereSeite2PageObjectModel us2;
 
     @BeforeEach
-    void setupPage() {
-        context = browser.newContext();
-        page = context.newPage();
-        page.navigate("main/webapp/unsere_seite2.html"); 
+    void createUnsereSeite2PageObject() {
+        us2 = new UnsereSeite2PageObjectModel(page);
     }
 
     @AfterEach
