@@ -28,7 +28,7 @@ public abstract class PlaywrightAbstractTester {
         } else {
             browserType = playwright.firefox();
         }
-        final Integer setSlowMo = 700;
+        final Integer setSlowMo = 1000;
         browser = browserType.launch(new BrowserType.LaunchOptions().setHeadless(headless).setSlowMo(setSlowMo));
     }
 
