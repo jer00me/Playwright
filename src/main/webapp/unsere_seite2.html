@@ -17,7 +17,7 @@
   </style>
 </head>
 <body>
-  <h1>Unsere Seite 2</h1>
+  <h1 id="header">Unsere Seite 2</h1>
 
   <p>Gefällt dir die Seite?</p>
   <input type="radio" name="like" value="yes" onclick="showFeedback()"> Ja
@@ -25,7 +25,7 @@
 
   <div id="feedback"></div>
 
-  <button onclick="goBack()">Zurück zur ersten Seite</button>
+  <button onclick="goBack()" id="button">Zurück zur ersten Seite</button>
 
   <script>
     function showFeedback() {
