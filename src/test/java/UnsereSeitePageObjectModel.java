@@ -64,4 +64,12 @@ public class UnsereSeitePageObjectModel extends AbstractPageObjectModel {
     public void clickSecondPageLink() {
         linkToSecond.click();
     }
+
+    public String getOutputNameColor() {
+        page.waitForSelector("#output span");
+        return page.locator("#output span")
+                .evaluate("el => getComputedStyle(el).color")
+                .toString();
+    }
+
 }
