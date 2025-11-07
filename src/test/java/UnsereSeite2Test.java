@@ -1,17 +1,9 @@
-import com.microsoft.playwright.*;
-import org.junit.jupiter.api.*;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UnsereSeite2Test extends PlaywrightAbstractTester{
-
-    static Playwright playwright;
-    static Browser browser;
-    BrowserContext context;
-    Page page;
 
     private UnsereSeite2PageObjectModel us2;
 
