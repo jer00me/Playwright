@@ -16,7 +16,8 @@ public class UnsereSeiteTest extends PlaywrightAbstractTester {
     }
 
     /** WHEN I open unsere_seite.html
-     * THEN title is "Unsere Seite" and header is "Unsere Seite" */
+     * THEN title is "Unsere Seite"
+     * AND header is "Unsere Seite" */
     @Test
     @DisplayName("minor: title and header text are 'Unsere Seite'")
     void testTitleAndHeader() {
@@ -24,13 +25,13 @@ public class UnsereSeiteTest extends PlaywrightAbstractTester {
         assertEquals("Unsere Seite", pageModel.getHeaderText());
     }
 
-    /** WHEN fields are empty
-     * THEN confirm button is red; WHEN all fields filled
-     * AND it becomes green (live validation) */
+    /** WHEN fields are empty or partially filled
+     *  THEN confirm button remains red (live validation inactive)
+     */
     @Test
-    @DisplayName("major: confirm button color transitions (empty→partial→complete)")
-    void testConfirmButtonColorChange() {
-        String initialColor = pageModel.getConfirmButtonColor(); // rgb()
+    @DisplayName("major: confirm button stays red when fields are empty or incomplete")
+    void testConfirmButtonStaysRedWhenIncomplete() {
+        String initialColor = pageModel.getConfirmButtonColor();
         assertEquals("rgb(255, 0, 0)", initialColor);
 
         pageModel.setName("Anna");
@@ -38,7 +39,16 @@ public class UnsereSeiteTest extends PlaywrightAbstractTester {
 
         pageModel.setBirthdate(LocalDate.of(2000, 1, 15));
         assertEquals("rgb(255, 0, 0)", pageModel.getConfirmButtonColor());
+    }
 
+    /** WHEN all required fields (name, birthdate, color) are filled
+     *  THEN confirm button turns green (live validation active)
+     */
+    @Test
+    @DisplayName("major: confirm button turns green when all fields are filled")
+    void testConfirmButtonTurnsGreenWhenAllFieldsFilled() {
+        pageModel.setName("Anna");
+        pageModel.setBirthdate(LocalDate.of(2000, 1, 15));
         pageModel.selectColor("blue");
         assertEquals("rgb(0, 128, 0)", pageModel.getConfirmButtonColor());
     }
@@ -67,21 +77,98 @@ public class UnsereSeiteTest extends PlaywrightAbstractTester {
     @DisplayName("major: successful confirm renders greeting with colored name and computed age")
     void testSuccessfulConfirmAndOutput() {
         String name = "Clara";
-        LocalDate birth = LocalDate.of(1998, 11, 7); // choisis une date fixe de test
+        LocalDate birth = LocalDate.of(1998, 11, 7);
 
         pageModel.setName(name);
         pageModel.setBirthdate(birth);
         pageModel.selectColor("red"); // red|green|yellow|blue
-        assertEquals("rgb(0, 128, 0)", pageModel.getConfirmButtonColor()); // green before click
+        assertEquals("rgb(0, 128, 0)", pageModel.getConfirmButtonColor());
 
         pageModel.clickConfirm();
 
-        int expectedAge = UnsereSeiteTest.computeAge(birth, LocalDate.now());
+        int expectedAge = 27;
 
         String outputText = pageModel.getOutputText();
-        assertTrue(outputText.contains("Hallo"), "Output should start with Hallo");
+        assertTrue(outputText.contains("Hallo Clara! Du bist 27 Jahre alt."), "Output should be \"Hallo Clara! Du bist 27 Jahre alt.\"");
         assertTrue(outputText.contains(name), "Output should contain the user name");
         assertTrue(outputText.contains(String.valueOf(expectedAge)), "Output should contain computed age");
+    }
+    /** GIVEN color=red selected
+     *  WHEN I confirm
+     *  THEN the name in output is rendered in red
+     */
+    @Test
+    @DisplayName("minor: output name is rendered with selected color (red)")
+    void testOutputNameRenderedInSelectedColorRed() {
+        String name = "Léa";
+
+        pageModel.setName(name);
+        pageModel.setBirthdate(LocalDate.now().minusYears(27));
+        pageModel.selectColor("red");
+
+        assertEquals("rgb(0, 128, 0)", pageModel.getConfirmButtonColor());
+        pageModel.clickConfirm();
+
+        assertEquals("rgb(255, 0, 0)", pageModel.getOutputNameColor());
+    }
+
+    /** GIVEN color=green selected
+     *  WHEN I confirm
+     *  THEN the name in output is rendered in green
+     */
+    @Test
+    @DisplayName("minor: output name is rendered with selected color (green)")
+    void testOutputNameRenderedInSelectedColorGreen() {
+        String name = "Manon";
+
+        pageModel.setName(name);
+        pageModel.setBirthdate(LocalDate.now().minusYears(27));
+        pageModel.selectColor("green");
+
+        assertEquals("rgb(0, 128, 0)", pageModel.getConfirmButtonColor());
+        pageModel.clickConfirm();
+
+        assertEquals("rgb(0, 128, 0)", pageModel.getOutputNameColor());
+    }
+
+    /** GIVEN color=yellow selected
+     *  WHEN I confirm
+     *  THEN the name in output is rendered in yellow
+     */
+    @Test
+    @DisplayName("minor: output name is rendered with selected color (yellow)")
+    void testOutputNameRenderedInSelectedColorYellow() {
+        String name = "Mia";
+
+        pageModel.setName(name);
+        pageModel.setBirthdate(LocalDate.now().minusYears(27));
+        pageModel.selectColor("yellow");
+
+        assertEquals("rgb(0, 128, 0)", pageModel.getConfirmButtonColor());
+        pageModel.clickConfirm();
+
+        assertEquals("rgb(255, 255, 0)", pageModel.getOutputNameColor());
+    }
+
+
+    /** GIVEN color=blue selected
+     *  WHEN I confirm
+     *  THEN the name in output is rendered in blue
+     */
+    @Test
+    @DisplayName("minor: output name is rendered with selected color (blue)")
+    void testOutputNameRenderedInSelectedColorBlue() {
+        String name = "Nina";
+
+        pageModel.setName(name);
+        pageModel.setBirthdate(LocalDate.now().minusYears(43));
+        pageModel.selectColor("blue");
+
+        assertEquals("rgb(0, 128, 0)", pageModel.getConfirmButtonColor());
+
+        pageModel.clickConfirm();
+
+        assertEquals("rgb(0, 0, 255)", pageModel.getOutputNameColor());
     }
 
     /** WHEN I click the link
@@ -95,12 +182,4 @@ public class UnsereSeiteTest extends PlaywrightAbstractTester {
         assertNotNull(second.title());
     }
 
-    private static int computeAge(LocalDate birthDate, LocalDate today) {
-        int age = today.getYear() - birthDate.getYear();
-        if (today.getMonthValue() < birthDate.getMonthValue()
-                || (today.getMonthValue() == birthDate.getMonthValue() && today.getDayOfMonth() < birthDate.getDayOfMonth())) {
-            age--;
-        }
-        return age;
-    }
 }
