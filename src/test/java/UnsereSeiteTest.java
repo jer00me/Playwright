@@ -179,7 +179,7 @@ public class UnsereSeiteTest extends PlaywrightAbstractTester {
         pageModel.clickSecondPageLink();
         assertTrue(page.url().endsWith("unsere_seite2.html"));
         UnsereSeite2PageObjectModel second = new UnsereSeite2PageObjectModel(page);
-        assertNotNull(second.title());
+        assertEquals("Unsere Seite 2", second.title(), "Expected page title to match 'Unsere Seite 2' on unsere_seite2.html");
     }
 
 }
