@@ -63,4 +63,17 @@ class UnsereSeite2Test extends PlaywrightAbstractTester{
         String actualFeedback = us2.getFeedback();
         assertEquals(expectedFeedback, actualFeedback);
     }
+
+    /**
+     * WHEN I click the button to get sent to the other page
+     * THEN the new title is "Unsere Seite"
+     */
+    @Test
+    @DisplayName("major: button brings you to other page")
+    void testButton() {
+        UnsereSeitePageObjectModel us = us2.clickReturnButton();
+        String expectedTitle = "Unsere Seite";
+        String actualTitle = us.title();
+        assertEquals(expectedTitle, actualTitle);
+    }
 }
