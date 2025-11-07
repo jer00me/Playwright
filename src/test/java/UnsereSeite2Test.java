@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UnsereSeite2Test extends PlaywrightAbstractTester{
+class UnsereSeite2Test extends PlaywrightAbstractTester{
 
     private UnsereSeite2PageObjectModel us2;
 
@@ -20,15 +20,17 @@ public class UnsereSeite2Test extends PlaywrightAbstractTester{
 
     @Test
     void testFeedbackYes() {
-        page.locator("input[value='yes']").click();
-        String feedback = page.locator("#feedback").innerText();
-        assertEquals("Freut uns zu hören!", feedback);
+        us2.clickYes();
+        String expectedFeedback = "Freut uns zu hören!";
+        String actualFeedback = us2.getFeedback();
+        assertEquals(expectedFeedback, actualFeedback);
     }
 
     @Test
     void testFeedbackNo() {
-        page.locator("input[value='no']").click();
-        String feedback = page.locator("#feedback").innerText();
-        assertEquals("Schade.", feedback);
+        us2.clickNo();
+        String expectedFeedback = "Schade.";
+        String actualFeedback = us2.getFeedback();
+        assertEquals(expectedFeedback, actualFeedback);
     }
 }
