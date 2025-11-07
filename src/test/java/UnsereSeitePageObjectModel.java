@@ -1,29 +1,67 @@
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
-public class UnsereSeitePageObjectModel extends AbstractPageObjectModel{
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-    // elements of the page model, access web elements / locators
-    private final Locator href_HelloPage;
-    private final Locator h1_Greeting;
-    private final Locator button_Language;
-    private final Locator input_Number;
-    private final Locator button_Square;
+public class UnsereSeitePageObjectModel extends AbstractPageObjectModel {
+
+    private final Locator header;
+    private final Locator nameInput;
+    private final Locator birthdateInput;
+    private final Locator colorSelect;
+    private final Locator confirmBtn;
+    private final Locator outputDiv;
+    private final Locator linkToSecond;
 
     public UnsereSeitePageObjectModel(Page page) {
         super(page);
-        this.href_HelloPage = page.locator("#link_pass");
-        this.h1_Greeting = page.locator("#heading");
-        this.button_Language = page.locator("#button");
-        this.input_Number = page.locator("#input");
-        this.button_Square = page.locator("#submit");
+        this.header = page.locator("#header");
+        this.nameInput = page.locator("#name");
+        this.birthdateInput = page.locator("#birthdate");
+        this.colorSelect = page.locator("#color");
+        this.confirmBtn = page.locator("#confirmBtn");
+        this.outputDiv = page.locator("#output");
+        this.linkToSecond = page.locator("#link");
     }
 
     public void open() {
-        String relativeURL = "/src/main/webapp/unsere_seite2.html";
+        String relativeURL = "/src/main/webapp/unsere_seite.html"; // ✅ corrige ici
         String projectRoot = getProjectRoot();
         String url = "file:///" + projectRoot + relativeURL;
         page.navigate(url);
     }
 
+    public String getHeaderText() {
+        return header.textContent().trim();
+    }
+
+    public void setName(String name) {
+        nameInput.fill(name);
+    }
+
+    public void setBirthdate(LocalDate date) {
+        String iso = date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        birthdateInput.fill(iso);
+    }
+
+    public void selectColor(String color) {
+        colorSelect.selectOption(color);
+    }
+
+    public void clickConfirm() {
+        confirmBtn.click();
+    }
+
+    public String getConfirmButtonColor() {
+        return confirmBtn.evaluate("el => getComputedStyle(el).backgroundColor").toString();
+    }
+
+    public String getOutputText() {
+        return outputDiv.textContent().trim();
+    }
+
+    public void clickSecondPageLink() {
+        linkToSecond.click();
+    }
 }
