@@ -18,22 +18,12 @@ public class UnsereSeite2Test extends PlaywrightAbstractTester{
     @BeforeEach
     void createUnsereSeite2PageObject() {
         us2 = new UnsereSeite2PageObjectModel(page);
-    }
-
-    @AfterEach
-    void closeContext() {
-        context.close();
-    }
-
-    @AfterAll
-    static void closeBrowser() {
-        browser.close();
-        playwright.close();
+        us2.open();
     }
 
     @Test
     void testPageTitle() {
-        assertEquals("Unsere Seite 2", page.title());
+        assertEquals("Unsere Seite 2", us2.title());
     }
 
     @Test
